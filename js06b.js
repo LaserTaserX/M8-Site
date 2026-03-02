@@ -14,6 +14,9 @@ let subButton = document.getElementById("subButton");
 subButton.addEventListener("click", validateName); 
 subButton.addEventListener("click", validateCard);
 subButton.addEventListener("click", validateNumber);
+subButton.addEventListener("click", validateMonth);
+subButton.addEventListener("click", validateYear);
+subButton.addEventListener("click", validateCVC);
 
 function validateName() {
    let cardName = document.getElementById("cardName");
@@ -34,18 +37,48 @@ function validateCard() {
 }
 
 function validateNumber() {
-   let cNum = document.getElementById("cardNum");
+   let cNum = document.getElementById("cardNumber");
    if (cNum.validity.valueMissing) {
       cNum.setCustomValidity("Enter your credit card number");
    } else if (cNum.validity.patternMismatch) {
+      cNum.setCustomValidity("Enter a valid credit card number");
+   } else if (!luhn(cNum.value)) { 
       cNum.setCustomValidity("Enter a valid credit card number");
    } else {
       cNum.setCustomValidity("");
    }
 }
 
+function validateMonth() {
+   let month = document.getElementById("expMonth");
+   if (month.selectedIndex === 0) {
+      month.setCustomValidity("Select the expiration month");
+   } else {
+      month.setCustomValidity("");
+   }
+}
 
+function validateYear() {
+   let year = document.getElementById("expYear");
+   if (year.selectedIndex === 0) {
+      year.setCustomValidity("Select the expiration year");
+   } else {
+      year.setCustomValidity("");
+   }
+}
 
+function validateCVC() {
+   let cvc = document.getElementById("cvc");
+   if (cvc.validity.valueMissing) {
+      cvc.setCustomValidity("Enter the 3-digit CVC code");
+   } else if ((card === "amex") && !(/^\d{4}$/.test(cvc.value))) {
+      cvc.setCustomValidity("Enter a 4-digit CVC code for American Express cards");
+   } else if ((card !== "amex") && !(/^\d{3}$/.test(cvc.value))) {
+      cvc.setCustomValidity("Enter a 3-digit CVC code for non-American Express cards");
+   } else {
+      cvc.setCustomValidity("");
+   }
+}
 
 
 
